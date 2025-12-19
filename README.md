@@ -74,10 +74,18 @@ export PYTHONPATH="/usr/lib/python3/dist-packages:$PYTHONPATH"
 uv sync --extra jetson
 
 # 3. 轉換模型 (需先有 ONNX)
-/usr/src/tensorrt/bin/trtexec --onnx=assets/models/yolov8n-pose.onnx --saveEngine=assets/models/yolov8n-pose.engine --fp16
+# 注意：需先在開發機執行 scripts/export_model.py 產生 ONNX 並傳輸到 Jetson
+/usr/src/tensorrt/bin/trtexec --onnx=assets/models/yolov8n-pose.onnx --saveEngine=assets/models/yolov8n-pose.engine --fp16 --memPoolSize=workspace:2048
 
-# 4. 運行
+# 4. 性能優化 (鎖定時脈)
+sudo ./scripts/jetson_clocks.sh
+
+# 5. 運行 (CSI 攝像頭)
+export DISPLAY=:0  # 確保輸出到實體螢幕
 python src/main.py --mode tensorrt --camera csi
+
+# 5. 運行 (USB 攝像頭)
+python src/main.py --mode tensorrt --camera usb
 ```
 
 ## 專案結構
@@ -117,7 +125,16 @@ ruff check . --fix
 ### 性能基準測試 (Jetson)
 
 ```bash
-python scripts/benchmark_detector.py --frames 100
+python scripts/benchmark_detector.py
+```
+
+### 開機自啟服務
+
+```bash
+# 安裝 systemd 服務
+sudo cp scripts/fitness-game.service /etc/systemd/system/
+sudo systemctl enable fitness-game.service
+sudo systemctl start fitness-game.service
 ```
 
 ## 憲章原則

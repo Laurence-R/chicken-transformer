@@ -46,7 +46,7 @@ class DiceRollDetectingState(GameState):
                 # Trigger Roll
                 dice_roll = random.randint(1, 6)
                 return StateTransition(
-                    next_state_name="TASK_DISPLAY", context_updates={"last_dice_roll": dice_roll}
+                    next_state_name="ROLLING", context_updates={"last_dice_roll": dice_roll}
                 )
         else:
             self.hold_start_time = None

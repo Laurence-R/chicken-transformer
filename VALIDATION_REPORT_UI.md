@@ -31,3 +31,35 @@ The UI consists of a main window split into a Camera Panel (70%) and an Info Pan
 ## 5. Next Steps
 - **Hardware Testing**: Run on Jetson Nano with a real display to verify performance (FPS).
 - **Polish**: Add more visual flair (animations, colors) in Phase 7.
+
+---
+
+# Phase 5: UI Polish & Experience Enhancement (Feature 003)
+
+## 1. Summary
+Addressed user feedback regarding "Lottery Feeling", "UI Aesthetics", and "Low FPS".
+Implemented a centralized Theme system, optimized rendering pipeline, and added a "Rolling" state for task selection.
+
+## 2. Enhancements Implemented
+- **Performance**:
+  - Replaced PyGame scaling with `cv2.resize` (C++ optimized) for camera feed.
+  - Implemented `TextCache` in `InfoPanel` to minimize font rendering overhead.
+  - Added dirty rect rendering support in `GameWindow`.
+- **Visuals**:
+  - Created `Theme` class (`src/ui/theme.py`) for consistent "Cyber Fitness" styling (Cyan/Dark Grey).
+  - Updated `InfoPanel` with rounded corners and themed colors.
+  - Updated `SkeletonRenderer` to use theme colors.
+  - Added Loading Screen with progress bar during initialization.
+- **Game Flow**:
+  - Added `RollingState` (Slot Machine effect) before task assignment.
+  - Implemented smooth transitions and "Rolling..." text animation.
+
+## 3. Verification Results (Script: `scripts/validate_feature_003.py`)
+- **Fonts**: Verified system support for "Noto Sans CJK" and successful Chinese text rendering.
+- **Theme**: Verified all color constants and font factories are accessible.
+- **Rolling Logic**: Verified state entry, duration (2.5s), and task selection logic.
+- **Stability**: Game launches successfully in Mock mode (headless) without crashing.
+
+## 4. Next Steps
+- **Hardware Validation**: Verify >20 FPS on Jetson Orin Nano.
+- **User Acceptance**: Verify the "Lottery Feeling" with actual users.

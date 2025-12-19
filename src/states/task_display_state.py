@@ -31,8 +31,13 @@ class TaskDisplayState(GameState):
     def enter(self, context: GameContext) -> None:
         self.display_start_time = time.time()
 
-        # Generate task based on dice roll
-        # For MVP, we just pick a random exercise regardless of roll
+        # If task is already set (e.g. by RollingState), use it
+        if context.current_task:
+            task = context.current_task
+            self._message = f"點數 {context.last_dice_roll}!\n任務: {task.description}"
+            return
+
+        # Otherwise generate task (fallback)
         try:
             exercise, reps, sets = self.task_library.get_random_task()
 

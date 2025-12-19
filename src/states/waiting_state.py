@@ -37,4 +37,4 @@ class WaitingState(GameState):
         pass
 
     def get_display_message(self) -> str:
-        return "請站在鏡頭前準備開始"
+        return "請站在鏡頭前\n準備舉手開始"

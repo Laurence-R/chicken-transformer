@@ -98,5 +98,5 @@ def test_dice_roll_logic():
     # Wait duration
     with patch("time.time", return_value=state.hold_start_time + 1.1):
         transition = state.update(context, mock_pose)
-        assert transition.next_state_name == "TASK_DISPLAY"
+        assert transition.next_state_name == "ROLLING"
         assert "last_dice_roll" in transition.context_updates

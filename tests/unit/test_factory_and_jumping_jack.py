@@ -74,21 +74,29 @@ def test_jumping_jack_validator_flow(mock_pose_data):
         # We need to set keypoint y values for hands
         # Hands down: wrist.y > shoulder.y
 
-        l_shoulder = MagicMock(y=50)
-        r_shoulder = MagicMock(y=50)
-        l_wrist = MagicMock(y=100)  # Down
-        r_wrist = MagicMock(y=100)  # Down
+        l_shoulder = MagicMock(y=50, confidence=0.9)
+        r_shoulder = MagicMock(y=50, confidence=0.9)
+        l_wrist = MagicMock(y=100, confidence=0.9)  # Down
+        r_wrist = MagicMock(y=100, confidence=0.9)  # Down
+        
+        # Helper to create mock keypoints with confidence
+        def create_mock_kp(y=0, conf=0.9):
+            return MagicMock(y=y, confidence=conf)
 
         pose.get_keypoint.side_effect = lambda name: {
             "left_shoulder": l_shoulder,
             "right_shoulder": r_shoulder,
             "left_wrist": l_wrist,
             "right_wrist": r_wrist,
-            "left_ankle": MagicMock(),
-            "right_ankle": MagicMock(),
-            "left_hip": MagicMock(),
-            "right_hip": MagicMock(),
-        }.get(name, MagicMock())
+            "left_ankle": create_mock_kp(),
+            "right_ankle": create_mock_kp(),
+            "left_hip": create_mock_kp(),
+            "right_hip": create_mock_kp(),
+            "left_knee": create_mock_kp(),
+            "right_knee": create_mock_kp(),
+            "left_elbow": create_mock_kp(),
+            "right_elbow": create_mock_kp(),
+        }.get(name, create_mock_kp())
 
         # 1. Initial Closed State
         # feet_dist = 30, shoulder_width = 50

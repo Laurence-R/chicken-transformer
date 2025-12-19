@@ -6,6 +6,7 @@ import pygame
 
 from ..utils.data_structures import PoseData
 from .skeleton_renderer import SkeletonRenderer
+from .theme import Theme
 
 
 class CameraPanel:
@@ -17,14 +18,7 @@ class CameraPanel:
         self.surface = pygame.Surface((width, height))
         
         # Font setup for camera panel (FPS etc)
-        font_names = [
-            "Noto Sans CJK TC",
-            "Noto Sans CJK SC",
-            "Droid Sans Fallback",
-            "WenQuanYi Zen Hei",
-            "Arial",
-        ]
-        self.font = pygame.font.SysFont(font_names, 24)
+        self.font = Theme.get_font(24)
 
     def update(self, frame: Optional[np.ndarray], pose_data: Optional[PoseData]):
         """Update the panel content.
@@ -36,31 +30,24 @@ class CameraPanel:
         self.surface.fill((0, 0, 0))  # Clear black
 
         if frame is not None:
-            # Frame is expected to be HxWx3 BGR (OpenCV format)
-            # Convert to RGB for PyGame
-            # Note: We assume frame is a numpy array.
+            # 1. Resize using OpenCV (Faster than PyGame)
+            # We resize to the panel dimensions
+            resized_frame = cv2.resize(frame, (self.rect.width, self.rect.height))
 
-            # Manual BGR to RGB conversion (slicing is fast enough for MVP)
-            # frame_rgb = frame[..., ::-1]
+            # 2. Convert BGR to RGB using OpenCV
+            frame_rgb = cv2.cvtColor(resized_frame, cv2.COLOR_BGR2RGB)
 
-            h, w, c = frame.shape
+            # 3. Create Surface directly from buffer (no scaling needed in PyGame)
+            # Since we resized, the dimensions match self.rect
+            img_surface = pygame.image.frombuffer(
+                frame_rgb.tobytes(), (self.rect.width, self.rect.height), "RGB"
+            )
 
-            # Create PyGame surface from buffer
-            # Use BGR format directly if supported, or convert efficiently
-            # PyGame 2.1.3+ supports "BGR" format in frombuffer
-            try:
-                img_surface = pygame.image.frombuffer(frame.tobytes(), (w, h), "BGR")
-            except ValueError:
-                # Fallback for older PyGame versions
-                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                img_surface = pygame.image.frombuffer(frame_rgb.tobytes(), (w, h), "RGB")
-
-            # Scale to fit panel
-            img_surface = pygame.transform.scale(img_surface, (self.rect.width, self.rect.height))
             self.surface.blit(img_surface, (0, 0))
 
             # Calculate scale factors for skeleton
             # Keypoints are in original frame coordinates (w, h)
+            h, w = frame.shape[:2]
             scale_x = self.rect.width / w
             scale_y = self.rect.height / h
 
@@ -69,7 +56,7 @@ class CameraPanel:
                 self.skeleton_renderer.draw(self.surface, pose_data, scale_x, scale_y)
         else:
             # No frame available
-            text = self.font.render("No Camera Feed", True, (255, 255, 255))
+            text = self.font.render("No Camera Feed", True, Theme.COLOR_TEXT_MAIN)
             text_rect = text.get_rect(center=(self.rect.width // 2, self.rect.height // 2))
             self.surface.blit(text, text_rect)
 

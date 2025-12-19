@@ -3,7 +3,8 @@
 import argparse
 import os
 import sys
-
+import time
+import pygame
 import numpy as np
 
 # Add project root to path
@@ -13,6 +14,7 @@ from src.game.game_manager import GameManager
 from src.models.mock_detector import MockPoseDetector
 from src.states.completion_state import CompletionState
 from src.states.dice_state import DiceRollDetectingState
+from src.states.rolling_state import RollingState
 from src.states.task_display_state import TaskDisplayState
 from src.states.task_executing_state import TaskExecutingState
 from src.states.waiting_state import WaitingState
@@ -100,7 +102,16 @@ def main():
     print(f"  Target FPS: {args.fps}")
     print(f"  Debug: {args.debug}")
 
+    # Initialize UI first to show loading screen
+    try:
+        game_window = GameWindow(fps=args.fps)
+    except Exception as e:
+        print(f"Failed to initialize GameWindow: {e}")
+        print("Ensure you have a display environment (e.g., XServer for WSL)")
+        sys.exit(1)
+
     # Initialize Components
+    game_window.draw_loading_screen(0.1, "Loading Task Library...")
     try:
         task_lib = TaskLibrary()
         # Load exercises from config relative to project root
@@ -111,6 +122,7 @@ def main():
         print(f"Loaded {len(task_lib.exercises)} exercises.")
     except Exception as e:
         print(f"Error loading task library: {e}")
+        game_window.close()
         sys.exit(1)
 
     game_manager = GameManager(task_lib)
@@ -118,6 +130,7 @@ def main():
     # Register States
     game_manager.register_state(WaitingState())
     game_manager.register_state(DiceRollDetectingState())
+    game_manager.register_state(RollingState(task_lib))
     game_manager.register_state(TaskDisplayState(task_lib))
     game_manager.register_state(TaskExecutingState())
     game_manager.register_state(CompletionState())
@@ -125,26 +138,36 @@ def main():
     game_manager.set_initial_state("WAITING")
 
     # Initialize Camera (if needed)
+    game_window.draw_loading_screen(0.3, "Initializing Camera...")
     camera_manager = None
     if args.camera != "none":
         if CameraManager is None:
             print("Error: CameraManager not available (missing dependencies?)")
+            game_window.close()
             sys.exit(1)
         camera_manager = CameraManager(camera_type=args.camera, fps=args.fps)
         if not camera_manager.initialize():
             print("Failed to initialize camera")
+            game_window.close()
             sys.exit(1)
 
     # Initialize Detector
+    game_window.draw_loading_screen(0.6, "Loading AI Model...")
     detector = None
     if args.mode == "mock":
         detector = MockPoseDetector(mode=args.mock_pose)
         if not detector.initialize():
             print("Failed to initialize mock detector")
+            if camera_manager:
+                camera_manager.release()
+            game_window.close()
             sys.exit(1)
     elif args.mode == "tensorrt":
         if TensorRTPoseDetector is None:
             print("Error: TensorRTPoseDetector not available (missing tensorrt/pycuda?)")
+            if camera_manager:
+                camera_manager.release()
+            game_window.close()
             sys.exit(1)
 
         engine_path = os.path.join(
@@ -156,22 +179,19 @@ def main():
         detector = TensorRTPoseDetector(engine_path=engine_path)
         if not detector.initialize():
             print("Failed to initialize TensorRT detector")
+            if camera_manager:
+                camera_manager.release()
+            game_window.close()
             sys.exit(1)
     else:
         print(f"Unknown mode: {args.mode}")
-        sys.exit(1)
-
-    # Initialize UI
-    try:
-        game_window = GameWindow(fps=args.fps)
-    except Exception as e:
-        print(f"Failed to initialize GameWindow: {e}")
-        print("Ensure you have a display environment (e.g., XServer for WSL)")
-        if detector:
-            detector.release()
         if camera_manager:
             camera_manager.release()
+        game_window.close()
         sys.exit(1)
+
+    game_window.draw_loading_screen(1.0, "Starting Game...")
+    time.sleep(0.5) # Short pause to show 100%
 
     print("\nGame Started! Press Esc to exit.")
 

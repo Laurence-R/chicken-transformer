@@ -56,6 +56,7 @@ class GameManager:
             raise ValueError(f"Unknown state: {state_name}")
 
         self.current_state = self.states[state_name]
+        self.context.current_state = self.current_state  # Sync context
         self.logger.info(f"Setting initial state: {state_name}")
         self.current_state.enter(self.context)
 
@@ -99,6 +100,7 @@ class GameManager:
 
         # Enter new state
         self.current_state = self.states[state_name]
+        self.context.current_state = self.current_state  # Sync context
         self.current_state.enter(self.context)
 
     def get_current_message(self) -> str:

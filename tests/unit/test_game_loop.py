@@ -53,6 +53,8 @@ def test_task_executing_timeout():
     mock_exercise = MagicMock()
     mock_exercise.name_en = "squat"
     mock_exercise.name_zh = "深蹲"
+    # Mock the validator class name for factory
+    mock_exercise.validator_class = "SquatValidator"
     mock_task.exercise = mock_exercise
 
     context.current_task = mock_task
@@ -78,6 +80,7 @@ def test_task_executing_activity_reset():
     mock_exercise = MagicMock()
     mock_exercise.name_en = "squat"
     mock_exercise.name_zh = "深蹲"
+    mock_exercise.validator_class = "SquatValidator"
     mock_task.exercise = mock_exercise
 
     context.current_task = mock_task

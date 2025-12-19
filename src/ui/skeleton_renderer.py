@@ -1,6 +1,7 @@
 import pygame
 
 from ..utils.data_structures import PoseData
+from .theme import Theme
 
 
 class SkeletonRenderer:
@@ -28,10 +29,10 @@ class SkeletonRenderer:
         ]
 
         self.colors = {
-            "joint": (0, 255, 0),  # Green
-            "limb": (0, 255, 255),  # Cyan
-            "low_conf": (0, 0, 255),  # Blue (low confidence)
-            "text": (255, 255, 255),  # White
+            "joint": Theme.COLOR_SUCCESS,
+            "limb": Theme.COLOR_ACCENT,
+            "low_conf": Theme.COLOR_TEXT_DIM,
+            "text": Theme.COLOR_TEXT_MAIN,
         }
 
         self.font = pygame.font.SysFont("Arial", 12)

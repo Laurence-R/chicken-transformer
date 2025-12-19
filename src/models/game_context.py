@@ -32,6 +32,8 @@ class GameContext:
     player_detected: bool = False
     last_dice_roll: int = 0
     consecutive_failures: int = 0
+    rolling_current_item: str = ""
+    rolling_end_time: float = 0.0
 
     def reset_task(self) -> None:
         """Clear the current task and temporary state."""

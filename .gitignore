@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Project specific
+assets/models/*.pt
+assets/models/*.onnx
+assets/models/*.engine
+yolov8n-pose.pt
+logs/
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/

@@ -1,0 +1,102 @@
+[
+  {
+    "name_zh": "深蹲",
+    "name_en": "squat",
+    "validator_class": "SquatValidator",
+    "min_reps": 3,
+    "max_reps": 15,
+    "min_sets": 1,
+    "max_sets": 5,
+    "difficulty": "medium"
+  },
+  {
+    "name_zh": "伏地挺身",
+    "name_en": "pushup",
+    "validator_class": "PushupValidator",
+    "min_reps": 3,
+    "max_reps": 20,
+    "min_sets": 1,
+    "max_sets": 5,
+    "difficulty": "medium"
+  },
+  {
+    "name_zh": "開合跳",
+    "name_en": "jumping_jack",
+    "validator_class": "JumpingJackValidator",
+    "min_reps": 5,
+    "max_reps": 30,
+    "min_sets": 1,
+    "max_sets": 5,
+    "difficulty": "easy"
+  },
+  {
+    "name_zh": "弓箭步",
+    "name_en": "lunge",
+    "validator_class": "LungeValidator",
+    "min_reps": 3,
+    "max_reps": 12,
+    "min_sets": 1,
+    "max_sets": 5,
+    "difficulty": "medium"
+  },
+  {
+    "name_zh": "平板支撐",
+    "name_en": "plank",
+    "validator_class": "PlankValidator",
+    "min_reps": 10,
+    "max_reps": 90,
+    "min_sets": 1,
+    "max_sets": 3,
+    "difficulty": "hard"
+  },
+  {
+    "name_zh": "仰臥起坐",
+    "name_en": "situp",
+    "validator_class": "SitupValidator",
+    "min_reps": 5,
+    "max_reps": 25,
+    "min_sets": 1,
+    "max_sets": 5,
+    "difficulty": "medium"
+  },
+  {
+    "name_zh": "波比跳",
+    "name_en": "burpee",
+    "validator_class": "BurpeeValidator",
+    "min_reps": 3,
+    "max_reps": 15,
+    "min_sets": 1,
+    "max_sets": 3,
+    "difficulty": "hard"
+  },
+  {
+    "name_zh": "登山式",
+    "name_en": "mountain_climber",
+    "validator_class": "MountainClimberValidator",
+    "min_reps": 5,
+    "max_reps": 30,
+    "min_sets": 1,
+    "max_sets": 5,
+    "difficulty": "hard"
+  },
+  {
+    "name_zh": "高抬腿",
+    "name_en": "high_knees",
+    "validator_class": "HighKneesValidator",
+    "min_reps": 10,
+    "max_reps": 40,
+    "min_sets": 1,
+    "max_sets": 5,
+    "difficulty": "medium"
+  },
+  {
+    "name_zh": "俄羅斯轉體",
+    "name_en": "russian_twist",
+    "validator_class": "RussianTwistValidator",
+    "min_reps": 5,
+    "max_reps": 30,
+    "min_sets": 1,
+    "max_sets": 5,
+    "difficulty": "medium"
+  }
+]

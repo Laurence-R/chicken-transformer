@@ -195,7 +195,7 @@ source .venv/bin/activate
 export PYTHONPATH="/usr/lib/python3/dist-packages:$PYTHONPATH"
 
 # 安裝依賴（從 pyproject.toml，Jetson 專用配置組）
-uv sync --group jetson
+uv sync --extra jetson
 ```
 
 ### 6. Jetson 依賴管理

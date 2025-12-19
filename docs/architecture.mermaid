@@ -1,0 +1,43 @@
+graph TD
+    subgraph Hardware
+        Cam[Camera (CSI/USB)]
+        GPU[Jetson GPU (TensorRT)]
+    end
+
+    subgraph Core
+        Main[main.py]
+        GM[GameManager]
+        CL[CameraManager]
+        Det[PoseDetector]
+    end
+
+    subgraph States
+        S1[WaitingState]
+        S2[DiceRollDetectingState]
+        S3[TaskDisplayState]
+        S4[TaskExecutingState]
+        S5[CompletionState]
+    end
+
+    subgraph UI
+        Win[GameWindow]
+        CP[CameraPanel]
+        IP[InfoPanel]
+    end
+
+    Cam -->|Frame| CL
+    CL -->|Frame| Main
+    Main -->|Frame| Det
+    Det -->|PoseData| Main
+    Det -.->|Inference| GPU
+    
+    Main -->|Update(Frame, PoseData)| GM
+    GM -->|Handle| S1
+    GM -->|Handle| S2
+    GM -->|Handle| S3
+    GM -->|Handle| S4
+    GM -->|Handle| S5
+    
+    Main -->|Render(Frame, PoseData, State)| Win
+    Win -->|Draw| CP
+    Win -->|Draw| IP

@@ -2,16 +2,19 @@
 
 Initial state of the game, waiting for a player to be detected.
 """
-from typing import Optional, TYPE_CHECKING
-from .game_state import GameState, StateTransition
+
+from typing import TYPE_CHECKING, Optional
+
 from ..models.game_context import GameContext
+from .game_state import GameState, StateTransition
 
 if TYPE_CHECKING:
     from ..utils.data_structures import PoseData
 
+
 class WaitingState(GameState):
     """Waiting for player to enter the frame."""
-    
+
     @property
     def name(self) -> str:
         return "WAITING"
@@ -21,14 +24,13 @@ class WaitingState(GameState):
         context.reset_task()
         context.player_detected = False
 
-    def update(self, context: GameContext, pose_data: Optional['PoseData']) -> StateTransition:
+    def update(self, context: GameContext, pose_data: Optional["PoseData"]) -> StateTransition:
         """Check if a player is detected."""
         if pose_data and pose_data.confidence > 0.5:
             return StateTransition(
-                next_state_name="DICE_ROLL_DETECTING",
-                context_updates={"player_detected": True}
+                next_state_name="DICE_ROLL_DETECTING", context_updates={"player_detected": True}
             )
-            
+
         return StateTransition(next_state_name=None, context_updates={})
 
     def exit(self, context: GameContext) -> None:

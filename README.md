@@ -49,15 +49,36 @@ source .venv/bin/activate
 uv sync
 ```
 
-### 3. 運行遊戲 (Mock 模式)
+### 3. 運行遊戲 (WSL/Linux - Mock 模式)
 
 ```bash
-python -m src.main --mode mock
+# 使用 Mock 檢測器（無需攝像頭）
+python src/main.py --mode mock
+
+# 使用 Mock 檢測器 + 隨機姿態
+python src/main.py --mode mock --mock-pose random
 ```
 
-### 4. Jetson 部署
+### 4. 部署到 Jetson Orin Nano
 
-詳見 [quickstart.md](specs/001-fitness-dice-game/quickstart.md)
+詳細步驟請參考 [DEPLOYMENT.md](DEPLOYMENT.md)
+
+```bash
+# 1. 安裝系統依賴
+sudo apt install python3-pycuda python3-opencv nvidia-tensorrt
+
+# 2. 設置環境
+uv venv .venv
+source .venv/bin/activate
+export PYTHONPATH="/usr/lib/python3/dist-packages:$PYTHONPATH"
+uv sync --extra jetson
+
+# 3. 轉換模型 (需先有 ONNX)
+/usr/src/tensorrt/bin/trtexec --onnx=assets/models/yolov8n-pose.onnx --saveEngine=assets/models/yolov8n-pose.engine --fp16
+
+# 4. 運行
+python src/main.py --mode tensorrt --camera csi
+```
 
 ## 專案結構
 

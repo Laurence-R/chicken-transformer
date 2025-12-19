@@ -1,0 +1,14 @@
+[unit]
+description=Fitness Dice Game Service
+After=nvargus-daemon.service
+
+[Service]
+Type=simple
+User=jetbot
+WorkingDirectory=/home/jetbot/chicken-transformer
+ExecStart=/home/jetbot/chicken-transformer/.venv/bin/python3 src/main.py --mode tensorrt --camera csi
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

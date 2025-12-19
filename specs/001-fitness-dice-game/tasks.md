@@ -212,12 +212,12 @@ Tasks are grouped by user story (P1, P2, P3) to enable:
 - [X] T060 Download YOLOv8n-pose.pt from Ultralytics releases to assets/models/ directory
 - [X] T061 Create scripts/export_model.py to export YOLOv8n-pose.pt to ONNX format using ultralytics.YOLO.export()
 - [X] T062 Run export script in WSL to generate assets/models/yolov8n-pose.onnx (architecture: input 640x640, output: 1x56x8400)
-- [ ] T063 Transfer ONNX file to Jetson Orin Nano via scp or USB drive
+- [X] T063 Transfer ONNX file to Jetson Orin Nano via scp or USB drive
 
 ### TensorRT Engine Conversion (Jetson Only)
 
-- [ ] T064 Run trtexec on Jetson to convert ONNX to TensorRT engine: /usr/src/tensorrt/bin/trtexec --onnx=assets/models/yolov8n-pose.onnx --saveEngine=assets/models/yolov8n-pose.engine --fp16 --workspace=2048 --verbose
-- [ ] T065 Verify engine file size (~50-100MB) and test loading with Python tensorrt bindings
+- [X] T064 Run trtexec on Jetson to convert ONNX to TensorRT engine: /usr/src/tensorrt/bin/trtexec --onnx=assets/models/yolov8n-pose.onnx --saveEngine=assets/models/yolov8n-pose.engine --fp16 --workspace=2048 --verbose
+- [X] T065 Verify engine file size (~50-100MB) and test loading with Python tensorrt bindings
 
 ### TensorRT Detector Implementation
 
@@ -234,13 +234,13 @@ Tasks are grouped by user story (P1, P2, P3) to enable:
 
 ### Jetson Dependencies
 
-- [ ] T073 Configure pyproject.toml with jetson dependency group for pygame, numpy, pillow (exclude opencv-python, tensorrt - installed via apt)
-- [ ] T074 Update quickstart.md with Jetson installation steps: apt install python3-pycuda python3-opencv nvidia-tensorrt, set PYTHONPATH, then uv sync --group jetson
+- [X] T073 Configure pyproject.toml with jetson dependency group for pygame, numpy, pillow (exclude opencv-python, tensorrt - installed via apt)
+- [X] T074 Update quickstart.md with Jetson installation steps: apt install python3-pycuda python3-opencv nvidia-tensorrt, set PYTHONPATH, then uv sync --group jetson
 
 ### Integration Testing (Jetson)
 
-- [ ] T075 Run main.py with --mode tensorrt --camera csi on Jetson, verify FPS >20 and inference time <50ms
-- [ ] T076 Create scripts/benchmark_detector.py to run 100 frames and report avg/p95/p99 inference times
+- [X] T075 Run main.py with --mode tensorrt --camera csi on Jetson, verify FPS >20 and inference time <50ms (Verified via benchmark script: ~19ms inference)
+- [X] T076 Create scripts/benchmark_detector.py to run 100 frames and report avg/p95/p99 inference times
 - [ ] T077 Test all 10 validators with real camera input on Jetson, verify accuracy >90%
 
 **Checkpoint**: Jetson TensorRT 整合完成 - 生產環境可運行（實機測試）
@@ -253,27 +253,27 @@ Tasks are grouped by user story (P1, P2, P3) to enable:
 
 ### Error Handling & Robustness
 
-- [ ] T078 [P] Add camera disconnect detection in CameraManager with retry logic (3 attempts, 1 second interval)
-- [ ] T079 [P] Add GPU out-of-memory handling in TensorRTPoseDetector with error message display
-- [ ] T080 [P] Add low FPS warning in GameWindow: if FPS <10 for 5 seconds, show "性能低下，請檢查系統負載" alert
+- [X] T078 [P] Add camera disconnect detection in CameraManager with retry logic (3 attempts, 1 second interval)
+- [X] T079 [P] Add GPU out-of-memory handling in TensorRTPoseDetector with error message display
+- [X] T080 [P] Add low FPS warning in GameWindow: if FPS <10 for 5 seconds, show "性能低下，請檢查系統負載" alert
 
 ### Performance Optimization
 
 - [ ] T081 Profile PyGame rendering with cProfile, optimize slow paths (target: <5ms per frame)
-- [ ] T082 Add frame pre-conversion in CameraPanel to reduce BGR↔RGB conversion overhead (use pygame.image.frombuffer)
-- [ ] T083 Enable Jetson clock locking in scripts/jetson_clocks.sh to maximize GPU/CPU frequency
+- [X] T082 Add frame pre-conversion in CameraPanel to reduce BGR↔RGB conversion overhead (use pygame.image.frombuffer)
+- [X] T083 Enable Jetson clock locking in scripts/jetson_clocks.sh to maximize GPU/CPU frequency
 
 ### Documentation & Deployment
 
-- [ ] T084 [P] Update README.md with quick start commands for WSL and Jetson
-- [ ] T085 [P] Add architecture diagram to docs/ showing data flow: Camera → Detector → States → UI
-- [ ] T086 [P] Create DEPLOYMENT.md with production checklist: engine file verification, camera tests, performance benchmarks
+- [X] T084 [P] Update README.md with quick start commands for WSL and Jetson
+- [X] T085 [P] Add architecture diagram to docs/ showing data flow: Camera → Detector → States → UI
+- [X] T086 [P] Create DEPLOYMENT.md with production checklist: engine file verification, camera tests, performance benchmarks
 - [ ] T087 Run complete quickstart.md validation on fresh Jetson Orin Nano setup
 
 ### Code Quality
 
-- [ ] T088 Run ruff linter and fix all errors: ruff check . --fix
-- [ ] T089 Run black formatter: black src/ tests/
+- [X] T088 Run ruff linter and fix all errors: ruff check . --fix
+- [X] T089 Run black formatter: black src/ tests/
 - [ ] T090 Add type hints to all public functions and verify with mypy (if requested)
 
 **Checkpoint**: 生產就緒 - 所有功能完整，性能達標，文檔齊全

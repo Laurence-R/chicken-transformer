@@ -1,5 +1,6 @@
 """GStreamer pipeline utilities for Jetson CSI cameras."""
 
+
 def gstreamer_pipeline(
     sensor_id=0,
     capture_width=1280,
@@ -11,7 +12,7 @@ def gstreamer_pipeline(
 ):
     """
     Return a GStreamer pipeline string for capturing from the CSI camera.
-    
+
     Args:
         sensor_id: The ID of the camera sensor (default 0)
         capture_width: The width of the captured image
@@ -20,7 +21,7 @@ def gstreamer_pipeline(
         display_height: The height of the displayed image
         framerate: The framerate of the captured video
         flip_method: The flip method (0=none, 2=rotate 180)
-    
+
     Returns:
         A GStreamer pipeline string.
     """

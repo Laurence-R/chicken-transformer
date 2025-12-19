@@ -1,52 +1,69 @@
-import pygame
-import numpy as np
 from typing import Optional
-from .skeleton_renderer import SkeletonRenderer
+
+import cv2
+import numpy as np
+import pygame
+
 from ..utils.data_structures import PoseData
+from .skeleton_renderer import SkeletonRenderer
+
 
 class CameraPanel:
     """Panel for displaying camera feed and skeleton overlay."""
-    
+
     def __init__(self, x: int, y: int, width: int, height: int):
         self.rect = pygame.Rect(x, y, width, height)
         self.skeleton_renderer = SkeletonRenderer()
         self.surface = pygame.Surface((width, height))
-        self.font = pygame.font.SysFont("Arial", 24)
+        
+        # Font setup for camera panel (FPS etc)
+        font_names = [
+            "Noto Sans CJK TC",
+            "Noto Sans CJK SC",
+            "Droid Sans Fallback",
+            "WenQuanYi Zen Hei",
+            "Arial",
+        ]
+        self.font = pygame.font.SysFont(font_names, 24)
 
     def update(self, frame: Optional[np.ndarray], pose_data: Optional[PoseData]):
         """Update the panel content.
-        
+
         Args:
             frame: BGR numpy array from camera/detector (H, W, 3)
             pose_data: Detected pose data
         """
-        self.surface.fill((0, 0, 0)) # Clear black
+        self.surface.fill((0, 0, 0))  # Clear black
 
         if frame is not None:
             # Frame is expected to be HxWx3 BGR (OpenCV format)
             # Convert to RGB for PyGame
             # Note: We assume frame is a numpy array.
-            
+
             # Manual BGR to RGB conversion (slicing is fast enough for MVP)
-            frame_rgb = frame[..., ::-1]
-            
-            h, w, c = frame_rgb.shape
-            
+            # frame_rgb = frame[..., ::-1]
+
+            h, w, c = frame.shape
+
             # Create PyGame surface from buffer
-            # We need to transpose axes because PyGame uses (width, height) but numpy uses (height, width)
-            # Actually pygame.image.frombuffer expects data in row-major order (like numpy), 
-            # but we need to specify the dimensions correctly (w, h).
-            img_surface = pygame.image.frombuffer(frame_rgb.tobytes(), (w, h), "RGB")
-            
+            # Use BGR format directly if supported, or convert efficiently
+            # PyGame 2.1.3+ supports "BGR" format in frombuffer
+            try:
+                img_surface = pygame.image.frombuffer(frame.tobytes(), (w, h), "BGR")
+            except ValueError:
+                # Fallback for older PyGame versions
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                img_surface = pygame.image.frombuffer(frame_rgb.tobytes(), (w, h), "RGB")
+
             # Scale to fit panel
             img_surface = pygame.transform.scale(img_surface, (self.rect.width, self.rect.height))
             self.surface.blit(img_surface, (0, 0))
-            
+
             # Calculate scale factors for skeleton
             # Keypoints are in original frame coordinates (w, h)
             scale_x = self.rect.width / w
             scale_y = self.rect.height / h
-            
+
             # Draw skeleton
             if pose_data:
                 self.skeleton_renderer.draw(self.surface, pose_data, scale_x, scale_y)

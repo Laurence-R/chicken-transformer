@@ -17,7 +17,7 @@
 ### 3. Model Verification
 - [ ] Engine file exists: `assets/models/yolov8n-pose.engine`
 - [ ] Engine file size is valid (~9-10MB for FP16)
-- [ ] Benchmark script passes: `python3 scripts/benchmark_detector.py`
+- [ ] Benchmark script passes: `uv run scripts/benchmark_detector.py`
   - [ ] Average Inference Time < 50ms (Target: ~20ms)
   - [ ] FPS > 20
 
@@ -27,19 +27,16 @@
 
 ### 5. Running the Application
 ```bash
-# Activate environment
-source .venv/bin/activate
-
 # Check Display (Important for GUI)
 echo $DISPLAY
 # If empty or wrong, set it (usually :0 or :1)
 export DISPLAY=:0
 
-# Run with TensorRT and CSI Camera
-python3 src/main.py --mode tensorrt --camera csi
+# Run with TensorRT and CSI Camera (using uv)
+uv run src/main.py --mode tensorrt --camera csi
 
 # OR Run with USB Camera
-python3 src/main.py --mode tensorrt --camera usb
+uv run src/main.py --mode tensorrt --camera usb
 ```
 
 ### 6. Troubleshooting

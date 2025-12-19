@@ -11,7 +11,7 @@
 - 🤖 **即時姿態檢測**: YOLOv8n-Pose + TensorRT FP16 加速（<50ms 推理）
 - 📊 **進度追蹤**: 實時計數、組數管理、視覺反饋
 - 🎮 **簡潔 UI**: PyGame 左右分割布局（70% 攝像頭 + 30% 資訊面板）
-- ⚡ **高性能**: 維持 >20 FPS 流暢遊戲體驗
+- ⚡ **高性能**: 維持 >20 FPS 流暢遊戲體驗 (待改進)
 
 ## 系統需求
 
@@ -53,10 +53,10 @@ uv sync
 
 ```bash
 # 使用 Mock 檢測器（無需攝像頭）
-python src/main.py --mode mock
+uv run src/main.py --mode mock
 
 # 使用 Mock 檢測器 + 隨機姿態
-python src/main.py --mode mock --mock-pose random
+uv run src/main.py --mode mock --mock-pose random
 ```
 
 ### 4. 部署到 Jetson Orin Nano
@@ -83,11 +83,11 @@ sudo ./scripts/jetson_clocks.sh
 # 5. 運行 (CSI 攝像頭)
 # 提示：若無法顯示視窗，請檢查 DISPLAY 變數 (例如: export DISPLAY=:1)
 export DISPLAY=:0
-python src/main.py --mode tensorrt --camera csi
+uv run src/main.py --mode tensorrt --camera csi
 
 # 5. 運行 (USB 攝像頭)
 # 若 CSI 攝像頭無法使用，可使用 USB 攝像頭
-python src/main.py --mode tensorrt --camera usb
+uv run src/main.py --mode tensorrt --camera usb
 ```
 
 ## 專案結構

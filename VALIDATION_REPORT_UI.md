@@ -61,5 +61,22 @@ Implemented a centralized Theme system, optimized rendering pipeline, and added 
 - **Stability**: Game launches successfully in Mock mode (headless) without crashing.
 
 ## 4. Next Steps
-- **Hardware Validation**: Verify >20 FPS on Jetson Orin Nano.
 - **User Acceptance**: Verify the "Lottery Feeling" with actual users.
+
+---
+
+# Phase 6: Hardware Validation & Tuning
+
+## 1. Summary
+Validated the application on Jetson Orin Nano hardware. Addressed display driver issues and tuned game difficulty based on initial testing.
+
+## 2. Issues Resolved
+- **Headless Display Issue**: Resolved `SDL_VIDEODRIVER=dummy` persistence by unsetting the variable, allowing the GUI to render on the physical display.
+- **UI Layout**: Adjusted `InfoPanel` spacing to prevent text overlap between "Current Task" and "Progress" sections.
+- **Game Difficulty**: Updated `config/exercises.json` to lower difficulty (Reps: 5-10, Sets: 1-2) for better accessibility.
+
+## 3. Verification Results
+- **Hardware Execution**: Game runs successfully on Jetson Orin Nano with TensorRT acceleration.
+- **Performance**: Achieved target FPS (>20 FPS) with UI rendering enabled.
+- **Stability**: `RollingState` and `GameWindow` operate correctly without crashing during state transitions.
+

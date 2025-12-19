@@ -30,8 +30,16 @@
 # Activate environment
 source .venv/bin/activate
 
+# Check Display (Important for GUI)
+echo $DISPLAY
+# If empty or wrong, set it (usually :0 or :1)
+export DISPLAY=:0
+
 # Run with TensorRT and CSI Camera
 python3 src/main.py --mode tensorrt --camera csi
+
+# OR Run with USB Camera
+python3 src/main.py --mode tensorrt --camera usb
 ```
 
 ### 6. Troubleshooting

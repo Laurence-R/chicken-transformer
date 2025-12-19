@@ -2,11 +2,11 @@
 
 **Fitness Dice Game powered by YOLOv8-Pose + TensorRT on Jetson Orin Nano**
 
-一個基於姿態識別的即時健身互動遊戲，玩家透過攝像頭執行「跳躍+舉手」動作擲骰子，系統隨機分配健身任務並實時驗證動作正確性。
+一個基於姿態識別的即時健身互動遊戲，玩家透過攝像頭執行「舉手保持」動作擲骰子，系統隨機分配健身任務並實時驗證動作正確性。
 
 ## 特色功能
 
-- 🎲 **體感擲骰子**: 透過跳躍+舉手動作觸發任務抽取
+- 🎲 **體感擲骰子**: 透過「舉手保持」動作觸發任務抽取 (需保持 1 秒)
 - 🏋️ **10+ 種健身動作**: 深蹲、伏地挺身、開合跳、波比跳等
 - 🤖 **即時姿態檢測**: YOLOv8n-Pose + TensorRT FP16 加速（<50ms 推理）
 - 📊 **進度追蹤**: 實時計數、組數管理、視覺反饋
@@ -81,10 +81,12 @@ uv sync --extra jetson
 sudo ./scripts/jetson_clocks.sh
 
 # 5. 運行 (CSI 攝像頭)
-export DISPLAY=:0  # 確保輸出到實體螢幕
+# 提示：若無法顯示視窗，請檢查 DISPLAY 變數 (例如: export DISPLAY=:1)
+export DISPLAY=:0
 python src/main.py --mode tensorrt --camera csi
 
 # 5. 運行 (USB 攝像頭)
+# 若 CSI 攝像頭無法使用，可使用 USB 攝像頭
 python src/main.py --mode tensorrt --camera usb
 ```
 

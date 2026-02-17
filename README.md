@@ -61,8 +61,6 @@ uv run src/main.py --mode mock --mock-pose random
 
 ### 4. 部署到 Jetson Orin Nano
 
-詳細步驟請參考 [DEPLOYMENT.md](DEPLOYMENT.md)
-
 ```bash
 # 1. 安裝系統依賴
 sudo apt install python3-pycuda python3-opencv nvidia-tensorrt
@@ -152,12 +150,21 @@ sudo systemctl start fitness-game.service
 
 ## 文檔
 
+- [驗證報告](VALIDATION_REPORT.md)
+- [架構圖](docs/architecture.mermaid)
+
+### 核心功能 (001-fitness-dice-game)
 - [功能規範](specs/001-fitness-dice-game/spec.md)
 - [實作計劃](specs/001-fitness-dice-game/plan.md)
 - [任務分解](specs/001-fitness-dice-game/tasks.md)
 - [環境設置](specs/001-fitness-dice-game/quickstart.md)
 - [資料模型](specs/001-fitness-dice-game/data-model.md)
 - [接口契約](specs/001-fitness-dice-game/contracts/)
+
+### 體驗增強 (003-enhance-game-experience)
+- [功能規範](specs/003-enhance-game-experience/spec.md)
+- [實作計劃](specs/003-enhance-game-experience/plan.md)
+- [任務分解](specs/003-enhance-game-experience/tasks.md)
 
 ## 授權
 

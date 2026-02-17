@@ -1,8 +1,8 @@
-%% ============================================================
-%% Chicken Transformer — System Architecture
-%% 健身骰子遊戲（弱雞轉換器）完整架構圖
-%% ============================================================
+# System Architecture
 
+> 健身骰子遊戲（弱雞轉換器）完整架構圖
+
+```mermaid
 graph TD
 
 %% ── Hardware Layer ──────────────────────────────────────────
@@ -71,7 +71,7 @@ graph TD
 
 %% ── UI Layer ───────────────────────────────────────────────
     subgraph UILayer["UI Layer - PyGame"]
-        GW[GameWindow<br/><i>game_window.py</i><br/>1280×720]
+        GW[GameWindow<br/><i>game_window.py</i><br/>1280x720]
         CP[CameraPanel<br/><i>camera_panel.py</i><br/>70% Left]
         IP[InfoPanel<br/><i>info_panel.py</i><br/>30% Right]
         SR[SkeletonRenderer<br/><i>skeleton_renderer.py</i>]
@@ -80,33 +80,33 @@ graph TD
 
 %% ── Utils Layer ────────────────────────────────────────────
     subgraph Utils["Utils"]
-        DS[data_structures.py<br/>Keypoint · BoundingBox · PoseData]
-        CO[constants.py<br/>COCO Keypoints · Thresholds]
-        GEO[geometry.py<br/>Angles · Distances]
+        DS[data_structures.py<br/>Keypoint / BoundingBox / PoseData]
+        CO[constants.py<br/>COCO Keypoints / Thresholds]
+        GEO[geometry.py<br/>Angles / Distances]
         LOG[logger.py<br/>Rotating File Handler]
     end
 
-%% ── Hardware → Camera ──────────────────────────────────────
+%% ── Hardware to Camera ─────────────────────────────────────
     CSI -->|GStreamer| GST
     USB -->|cv2.VideoCapture| CM
     GST -->|Pipeline String| CM
 
 %% ── Main Loop Data Flow ───────────────────────────────────
-    CM -->|"frame: np.ndarray<br/>(BGR H×W×3)"| Main
+    CM -->|"frame: np.ndarray (BGR)"| Main
     Main -->|frame| PD
-    PD -->|"PoseData<br/>(17 keypoints)"| Main
+    PD -->|"PoseData (17 keypoints)"| Main
 
 %% ── Detection Hierarchy ───────────────────────────────────
     PD ---|implements| Mock
     PD ---|implements| TRT
-    TRT -.->|"CUDA Inference<br/>< 50ms"| GPU
+    TRT -.->|"CUDA Inference < 50ms"| GPU
 
-%% ── Main → Game Core ──────────────────────────────────────
+%% ── Main to Game Core ─────────────────────────────────────
     Main -->|"update(pose_data)"| GM
-    GM -->|"owns"| GC
+    GM -->|owns| GC
 
-%% ── GameManager → State Machine ───────────────────────────
-    GM -->|"current_state.update(context, pose_data)<br/>→ StateTransition"| GS
+%% ── GameManager to State Machine ──────────────────────────
+    GM -->|"state.update(ctx, pose) -> StateTransition"| GS
     GS ---|implements| S1
     GS ---|implements| S2
     GS ---|implements| S3
@@ -114,24 +114,24 @@ graph TD
     GS ---|implements| S5
     GS ---|implements| S6
 
-%% ── Main → UI ─────────────────────────────────────────────
+%% ── Main to UI ────────────────────────────────────────────
     Main -->|"update(context, frame, pose_data)"| GW
     GW -->|"update(frame, pose_data)"| CP
     GW -->|"update(context, fps)"| IP
     CP -->|"draw(surface, pose_data)"| SR
-    TH -.->|colors & fonts| CP
-    TH -.->|colors & fonts| IP
-    TH -.->|colors & fonts| SR
+    TH -.->|colors and fonts| CP
+    TH -.->|colors and fonts| IP
+    TH -.->|colors and fonts| SR
 
 %% ── Task System Flow ──────────────────────────────────────
-    EJ -->|"JSON load"| TL
+    EJ -->|JSON load| TL
     TL -->|"get_random_task()"| WT
-    WT -->|"tracks"| PT
-    S3 -->|"selects task via"| TL
-    S5 -->|"validates via"| VF
+    WT -->|tracks| PT
+    S3 -->|selects task via| TL
+    S5 -->|validates via| VF
 
 %% ── Validator Hierarchy ───────────────────────────────────
-    VF -->|"create_validator(name)<br/>importlib"| AV
+    VF -->|"create_validator(name) importlib"| AV
     AV ---|implements| V1
     AV ---|implements| V2
     AV ---|implements| V3
@@ -143,11 +143,11 @@ graph TD
     AV ---|implements| V9
     AV ---|implements| V10
 
-%% ── Utils Dependencies (dotted) ───────────────────────────
+%% ── Utils Dependencies ────────────────────────────────────
     DS -.->|Keypoint types| PD
     DS -.->|PoseData| GW
     CO -.->|KEYPOINT_INDICES| DS
-    GEO -.->|angle/distance| AV
+    GEO -.->|angle and distance| AV
 
 %% ── Styling ────────────────────────────────────────────────
     classDef hw fill:#4a1942,stroke:#e040fb,color:#fff
@@ -171,3 +171,4 @@ graph TD
     class AV,VF,V1,V2,V3,V4,V5,V6,V7,V8,V9,V10 valid
     class GW,CP,IP,SR,TH ui
     class DS,CO,GEO,LOG util
+```

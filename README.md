@@ -151,8 +151,8 @@ sudo systemctl start fitness-game.service
 ## 文檔
 
 - [驗證報告](VALIDATION_REPORT.md)
-- [系統架構圖](docs/architecture.mermaid)
-- [狀態機圖](docs/state-machine.mermaid)
+- [系統架構圖](docs/architecture.md)
+- [狀態機圖](docs/state-machine.md)
 
 ### 核心功能 (001-fitness-dice-game)
 - [功能規範](specs/001-fitness-dice-game/spec.md)
